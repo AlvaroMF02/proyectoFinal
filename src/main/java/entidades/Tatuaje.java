@@ -2,7 +2,6 @@ package entidades;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
 
 /**
@@ -15,8 +14,6 @@ import java.util.List;
 public class Tatuaje implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private String codcen;
-
 	private String estilo;
 
 	private int precio;
@@ -24,18 +21,11 @@ public class Tatuaje implements Serializable {
 	private String tiempo;
 
 	//bi-directional many-to-one association to Centro
-	@OneToMany(mappedBy="tatuaje")
-	private List<Centro> centros;
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="codcen")
+	private Centro centro;
 
 	public Tatuaje() {
-	}
-
-	public String getCodcen() {
-		return this.codcen;
-	}
-
-	public void setCodcen(String codcen) {
-		this.codcen = codcen;
 	}
 
 	public String getEstilo() {
@@ -62,26 +52,12 @@ public class Tatuaje implements Serializable {
 		this.tiempo = tiempo;
 	}
 
-	public List<Centro> getCentros() {
-		return this.centros;
+	public Centro getCentro() {
+		return this.centro;
 	}
 
-	public void setCentros(List<Centro> centros) {
-		this.centros = centros;
-	}
-
-	public Centro addCentro(Centro centro) {
-		getCentros().add(centro);
-		centro.setTatuaje(this);
-
-		return centro;
-	}
-
-	public Centro removeCentro(Centro centro) {
-		getCentros().remove(centro);
-		centro.setTatuaje(null);
-
-		return centro;
+	public void setCentro(Centro centro) {
+		this.centro = centro;
 	}
 
 }

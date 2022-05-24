@@ -14,20 +14,29 @@ import javax.persistence.*;
 public class Empleado implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private String codemp;
+
 	private int aniosExp;
 
 	private String apellido;
 
-	@Id
-	private String codemp;
-
 	private String nomem;
 
 	//bi-directional one-to-one association to Centro
-	@OneToOne(mappedBy="empleado")
+	@OneToOne(mappedBy="empleado", fetch=FetchType.LAZY)
 	private Centro centro;
 
 	public Empleado() {
+	}
+
+	public String getCodemp() {
+		return this.codemp;
+	}
+
+	public void setCodemp(String codemp) {
+		this.codemp = codemp;
 	}
 
 	public int getAniosExp() {
@@ -44,14 +53,6 @@ public class Empleado implements Serializable {
 
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
-	}
-
-	public String getCodemp() {
-		return this.codemp;
-	}
-
-	public void setCodemp(String codemp) {
-		this.codemp = codemp;
 	}
 
 	public String getNomem() {

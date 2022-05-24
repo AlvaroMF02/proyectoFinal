@@ -2,6 +2,7 @@ package entidades;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.List;
 
 
 /**
@@ -15,7 +16,8 @@ public class Centro implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private Object codcen;
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private String codcen;
 
 	private String codemp;
 
@@ -26,25 +28,23 @@ public class Centro implements Serializable {
 	private String ubicacion;
 
 	//bi-directional one-to-one association to Empleado
-	@OneToOne
+	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumns({
 		})
-	private Empleado empleado;
+	private Empleado empleado; 
 
 	//bi-directional many-to-one association to Tatuaje
-	@ManyToOne
-	@JoinColumns({
-		})
-	private Tatuaje tatuaje;
+	@OneToMany(mappedBy="centro")
+	private List<Tatuaje> tatuajes;
 
 	public Centro() {
 	}
 
-	public Object getCodcen() {
+	public String getCodcen() {
 		return this.codcen;
 	}
 
-	public void setCodcen(Object codcen) {
+	public void setCodcen(String codcen) {
 		this.codcen = codcen;
 	}
 
@@ -88,12 +88,26 @@ public class Centro implements Serializable {
 		this.empleado = empleado;
 	}
 
-	public Tatuaje getTatuaje() {
-		return this.tatuaje;
+	public List<Tatuaje> getTatuajes() {
+		return this.tatuajes;
 	}
 
-	public void setTatuaje(Tatuaje tatuaje) {
-		this.tatuaje = tatuaje;
+	public void setTatuajes(List<Tatuaje> tatuajes) {
+		this.tatuajes = tatuajes;
+	}
+
+	public Tatuaje addTatuaje(Tatuaje tatuaje) {
+		getTatuajes().add(tatuaje);
+		tatuaje.setCentro(this);
+
+		return tatuaje;
+	}
+
+	public Tatuaje removeTatuaje(Tatuaje tatuaje) {
+		getTatuajes().remove(tatuaje);
+		tatuaje.setCentro(null);
+
+		return tatuaje;
 	}
 
 }
